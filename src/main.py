@@ -11,8 +11,10 @@ headers = {'Authorization': 'Bearer ' + PROXYCURL_API}
 
 api_endpoint = 'https://nubela.co/proxycurl/api/v2/linkedin'
 
+linkedin_profile_url = "https://www.linkedin.com/in/tyfrankel/"
+
 params = {
-    'linkedin_profile_url': 'https://www.linkedin.com/in/tyfrankel/',
+    'linkedin_profile_url': f'{linkedin_profile_url}',
     'extra': 'exclude',
     'github_profile_id': 'exclude',
     'facebook_profile_id': 'exclude',
@@ -24,6 +26,7 @@ params = {
     'use_cache': 'if-recent',
     'fallback_to_cache': 'on-error',
 }
+
 try:
     response = requests.get(api_endpoint, params=params, headers=headers)
     response.raise_for_status()  
@@ -92,8 +95,15 @@ profile_data = {
 
 df = pd.DataFrame([profile_data])
 
+excel_path = '../data/linkedin_profile_data.xlsx'
 try:
-    df.to_excel('../data/linkedin_profile_data.xlsx', index=False)
+    if os.path.exists(excel_path):
+        existing_df = pd.read_excel(excel_path)
+        combined_df = pd.concat([existing_df, df], ignore_index=True)
+        combined_df.to_excel(excel_path, index=False)
+    else:
+        df.to_excel(excel_path, index=False)
+    print(f"Profile data for {profile.full_name} saved successfully.")
 except Exception as e:
     print(f"An error occurred while saving to Excel: {e}")
 
