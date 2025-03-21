@@ -11,7 +11,7 @@ headers = {'Authorization': 'Bearer ' + PROXYCURL_API}
 
 api_endpoint = 'https://nubela.co/proxycurl/api/v2/linkedin'
 
-linkedin_profile_url = "https://www.linkedin.com/in/tyfrankel/"
+linkedin_profile_url = "Enter URL here..."
 
 params = {
     'linkedin_profile_url': f'{linkedin_profile_url}',
