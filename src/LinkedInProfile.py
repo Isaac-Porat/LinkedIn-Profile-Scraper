@@ -9,6 +9,7 @@ class DateInfo:
     year: int
     
     def to_date(self) -> date:
+        """Convert the DateInfo instance to a date object."""
         return date(self.year, self.month, self.day)
 
 @dataclass
@@ -113,6 +114,7 @@ class LinkedInProfile:
         """Create a LinkedInProfile instance from a dictionary."""
         # Helper function to convert date dictionaries to DateInfo objects
         def parse_date(date_dict: Optional[Dict[str, int]]) -> Optional[DateInfo]:
+            """Convert a date dictionary to a DateInfo object."""
             if not date_dict:
                 return None
             return DateInfo(
@@ -121,7 +123,7 @@ class LinkedInProfile:
                 year=date_dict.get("year", 1970)
             )
         
-        # Parse projects
+        # Parse projects from the input data
         projects = []
         for proj in data.get("accomplishment_projects", []):
             projects.append(Project(
@@ -132,7 +134,7 @@ class LinkedInProfile:
                 url=proj.get("url")
             ))
         
-        # Parse certifications
+        # Parse certifications from the input data
         certifications = []
         for cert in data.get("certifications", []):
             certifications.append(Certification(
@@ -145,7 +147,7 @@ class LinkedInProfile:
                 display_source=cert.get("display_source")
             ))
         
-        # Parse education
+        # Parse education from the input data
         education = []
         for edu in data.get("education", []):
             education.append(Education(
@@ -162,7 +164,7 @@ class LinkedInProfile:
                 school_facebook_profile_url=edu.get("school_facebook_profile_url")
             ))
         
-        # Parse experiences
+        # Parse experiences from the input data
         experiences = []
         for exp in data.get("experiences", []):
             experiences.append(Experience(
@@ -177,7 +179,7 @@ class LinkedInProfile:
                 company_facebook_profile_url=exp.get("company_facebook_profile_url")
             ))
         
-        # Parse activities
+        # Parse activities from the input data
         activities = []
         for act in data.get("activities", []):
             activities.append(Activity(
@@ -186,7 +188,7 @@ class LinkedInProfile:
                 link=act.get("link", "")
             ))
         
-        # Parse similar profiles
+        # Parse similar profiles from the input data
         similar_profiles = []
         for prof in data.get("similarly_named_profiles", []):
             similar_profiles.append(SimilarProfile(
@@ -196,7 +198,7 @@ class LinkedInProfile:
                 summary=prof.get("summary")
             ))
         
-        # Create and return the profile
+        # Create and return the LinkedInProfile instance
         return cls(
             first_name=data.get("first_name", ""),
             last_name=data.get("last_name", ""),

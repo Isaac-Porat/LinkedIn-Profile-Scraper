@@ -4,15 +4,20 @@ from dotenv import load_dotenv
 import pandas as pd
 from LinkedInProfile import LinkedInProfile
 
+# Load environment variables from .env file
 load_dotenv()
 PROXYCURL_API = os.getenv("PROXYCURL_API")
 
+# Set up headers for the API request
 headers = {'Authorization': 'Bearer ' + PROXYCURL_API}
 
+# Define the API endpoint for Proxycurl's LinkedIn profile API
 api_endpoint = 'https://nubela.co/proxycurl/api/v2/linkedin'
 
+# Placeholder for the LinkedIn profile URL
 linkedin_profile_url = "Enter URL here..."
 
+# Parameters for the API request
 params = {
     'linkedin_profile_url': f'{linkedin_profile_url}',
     'extra': 'exclude',
@@ -41,25 +46,29 @@ except requests.exceptions.HTTPError as http_err:
 except Exception as err:
     print(f"An error occurred: {err}")
 
+# Parse the response data into a LinkedInProfile object
 response_data = response.json()
-
 profile = LinkedInProfile.from_dict(response_data)
 
+# Create a folder to save the profile data
 profile_folder = f"../data/{profile.full_name.replace(' ', '_')}"
 os.makedirs(profile_folder, exist_ok=True)
 
+# Download and save the profile picture if available
 if profile.profile_pic_url:
     profile_pic_response = requests.get(profile.profile_pic_url)
     if profile_pic_response.status_code == 200:
         with open(os.path.join(profile_folder, 'profile_pic.jpg'), 'wb') as f:
             f.write(profile_pic_response.content)
 
+# Download and save the background cover image if available
 if profile.background_cover_image_url:
     background_cover_response = requests.get(profile.background_cover_image_url)
     if background_cover_response.status_code == 200:
         with open(os.path.join(profile_folder, 'background_cover.jpg'), 'wb') as f:
             f.write(background_cover_response.content)
 
+# Prepare the profile data for saving
 profile_data = {
     "First Name": profile.first_name,
     "Last Name": profile.last_name,
@@ -106,11 +115,3 @@ try:
     print(f"Profile data for {profile.full_name} saved successfully.")
 except Exception as e:
     print(f"An error occurred while saving to Excel: {e}")
-
-
-
-
-
-
-
-
